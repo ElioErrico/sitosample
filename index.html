@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Elio &amp; Marti - Il Nostro Giorno Speciale</title>
   
-  <!-- Collegamento Google Fonts (esempio: Playfair Display per i titoli, Roboto per il testo) -->
+  <!-- Collegamento Google Fonts (Playfair Display per i titoli, Roboto per il testo) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
@@ -17,7 +17,7 @@
 </head>
 <body>
 
-  <!-- Navbar fissa in alto (opzionale) -->
+  <!-- Navbar in alto (non fissa) -->
   <nav class="main-nav">
     <ul>
       <li><a href="#benvenuto">Benvenuto</a></li>
@@ -51,7 +51,7 @@
         Di seguito troverete tutte le informazioni utili per raggiungere la cerimonia e festeggiare con noi.
       </p>
 
-      <!-- Foto (fino a 3, scelte tra quelle disponibili) -->
+      <!-- Fino a 3 foto scelte tra quelle disponibili -->
       <div class="info-images">
         <img src="images/2.jpg" alt="Foto informativa 1">
         <img src="images/3.jpg" alt="Foto informativa 2">
@@ -107,13 +107,11 @@
   <section id="galleria" class="section section-galleria">
     <div class="content fade-in">
       <h2>Galleria Fotografica</h2>
-      <!-- Griglia responsive con le restanti foto (o tutte, a scelta) -->
       <div class="gallery-grid">
         <img src="images/7.jpg" alt="Foto Galleria 1">
         <img src="images/8.jpg" alt="Foto Galleria 2">
         <img src="images/9.jpg" alt="Foto Galleria 3">
         <img src="images/10.jpg" alt="Foto Galleria 4">
-        <!-- Aggiungi altre foto se vuoi, oppure sostituisci quelle esistenti -->
       </div>
     </div>
   </section>
@@ -123,19 +121,17 @@
     <p>&copy; 2025 Elio &amp; Marti - Tutti i diritti riservati</p>
   </footer>
 
-  <!-- (Opzionale) JavaScript per animazioni, fade-in, ecc. -->
+  <!-- JavaScript per animazioni, fade-in, ecc. (opzionale) -->
   <script>
-    // Esempio semplice di fade-in con Intersection Observer
+    // Semplice fade-in con Intersection Observer
     const faders = document.querySelectorAll('.fade-in');
-    const options = {
-      threshold: 0.2
-    };
+    const options = { threshold: 0.2 };
 
-    const appearOnScroll = new IntersectionObserver(function(entries, appearOnScroll) {
+    const appearOnScroll = new IntersectionObserver(function(entries, observer) {
       entries.forEach(entry => {
         if (!entry.isIntersecting) return;
         entry.target.classList.add('appear');
-        appearOnScroll.unobserve(entry.target);
+        observer.unobserve(entry.target);
       });
     }, options);
 
