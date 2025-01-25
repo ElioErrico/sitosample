@@ -128,9 +128,10 @@ body {
 }
 
 .logistica {
-  text-align: left;
+  text-align: center;
   margin-top: 2rem;
 }
+
 
 .logistica h3 {
   font-family: 'Playfair Display', serif;
