@@ -7,65 +7,24 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Elio &amp; Marti - Il Nostro Giorno Speciale</title>
   
-  <!-- Google Fonts (Playfair Display per i titoli, Roboto per il testo) -->
+  <!-- Collegamento Google Fonts (Playfair Display per i titoli, Roboto per il testo) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link 
-    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto:wght@400;500&display=swap" 
-    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
   
-  <!-- Font Awesome (CDN) -->
-  <link 
-    rel="stylesheet" 
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
-    integrity="sha512-acF6uZErGvaNejN69TAy/nqqC1Mv+ET39gpZ0juCYATlZvbBZuY0XHB2HpNfgZn52y05qKo4RBSoT5VBCE/rfA==" 
-    crossorigin="anonymous" 
-    referrerpolicy="no-referrer" 
-  />
-
   <!-- Collegamento al file CSS -->
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-  <!-- NAVBAR fissa, con effetto "shrink" e icone Font Awesome -->
-  <nav class="main-nav" id="mainNav">
+  <!-- Navbar in alto (non fissa) -->
+  <nav class="main-nav">
     <ul>
-      <!-- Esempio: icona "home" (Benvenuto) -->
-      <li>
-        <a href="#benvenuto">
-          <i class="fas fa-home"></i>
-          <span class="link-text">Benvenuto</span>
-        </a>
-      </li>
-      <!-- Esempio: icona "info-circle" (Informazioni) -->
-      <li>
-        <a href="#info-generali">
-          <i class="fas fa-info-circle"></i>
-          <span class="link-text">Informazioni</span>
-        </a>
-      </li>
-      <!-- Esempio: icona "suitcase-rolling" (Viaggio di nozze) -->
-      <li>
-        <a href="#viaggio-nozze">
-          <i class="fas fa-suitcase-rolling"></i>
-          <span class="link-text">Viaggio di Nozze</span>
-        </a>
-      </li>
-      <!-- Esempio: icona "gift" (Regalo) -->
-      <li>
-        <a href="#regalo">
-          <i class="fas fa-gift"></i>
-          <span class="link-text">Regalo</span>
-        </a>
-      </li>
-      <!-- Esempio: icona "images" (Galleria) -->
-      <li>
-        <a href="#galleria">
-          <i class="fas fa-images"></i>
-          <span class="link-text">Galleria</span>
-        </a>
-      </li>
+      <li><a href="#benvenuto">Benvenuto</a></li>
+      <li><a href="#info-generali">Informazioni</a></li>
+      <li><a href="#viaggio-nozze">Viaggio di Nozze</a></li>
+      <li><a href="#regalo">Regalo</a></li>
+      <li><a href="#galleria">Galleria</a></li>
     </ul>
   </nav>
 
@@ -105,8 +64,8 @@
         <p>Chiesa di Santa Maria, Via delle Rose 123, Roma</p>
         
         <h3>Indicazioni Stradali / Mappa</h3>
+        <!-- Esempio di integrazione Google Maps tramite iframe -->
         <div class="map-container">
-          <!-- Esempio di integrazione Google Maps tramite iframe -->
           <iframe
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2994.1234567890!2d12.1234567!3d41.9876543!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x132f61bfffffff!2sChiesa%20di%20Santa%20Maria!5e0!3m2!1sit!2sit!4v00000000000000"
             width="100%" height="350" style="border:0;" allowfullscreen="" loading="lazy">
@@ -162,31 +121,22 @@
     <p>&copy; 2025 Elio &amp; Marti - Tutti i diritti riservati</p>
   </footer>
 
-  <!-- Script: fade-in e shrink nav -->
+  <!-- JavaScript per animazioni, fade-in, ecc. (opzionale) -->
   <script>
-    // Fade-in con Intersection Observer
+    // Semplice fade-in con Intersection Observer
     const faders = document.querySelectorAll('.fade-in');
-    const appearOptions = { threshold: 0.2 };
+    const options = { threshold: 0.2 };
+
     const appearOnScroll = new IntersectionObserver(function(entries, observer) {
       entries.forEach(entry => {
         if (!entry.isIntersecting) return;
         entry.target.classList.add('appear');
         observer.unobserve(entry.target);
       });
-    }, appearOptions);
+    }, options);
 
     faders.forEach(fader => {
       appearOnScroll.observe(fader);
-    });
-
-    // Effetto "shrink" per la navbar
-    window.addEventListener('scroll', () => {
-      const nav = document.getElementById('mainNav');
-      if (window.scrollY > 50) {
-        nav.classList.add('shrink');
-      } else {
-        nav.classList.remove('shrink');
-      }
     });
   </script>
 
