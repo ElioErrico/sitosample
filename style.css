@@ -5,7 +5,7 @@
   box-sizing: border-box;
 }
 
-/* Font generali */
+/* Impostazioni font generali */
 body {
   font-family: 'Roboto', sans-serif;
   color: #333;
@@ -14,84 +14,47 @@ body {
   scroll-behavior: smooth;
 }
 
-/* NAVBAR FISSA CON TESTO + ICONE DA FONT AWESOME */
+/* Navbar: NON è più fissa, per evitare la barra in alto che resta */
 .main-nav {
-  position: fixed;
-  top: 0;
-  width: 100%;
-  z-index: 999;
   background-color: #fff;
+  margin-bottom: 1rem; /* margine sotto la nav */
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  transition: padding 0.3s ease;
-  padding: 0.8rem 1rem;
 }
 
 .main-nav ul {
   list-style: none;
   display: flex;
-  align-items: center;
   justify-content: center;
-  gap: 1rem;
+  padding: 0.5rem 1rem;
+  margin: 0;
 }
 
-/* Link + icone */
+.main-nav li {
+  margin: 0 1rem;
+}
+
 .main-nav a {
   text-decoration: none;
   color: #333;
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
   font-weight: 500;
-  transition: color 0.3s ease, opacity 0.3s ease;
+  transition: color 0.3s ease;
 }
 
-/* Icone Font Awesome */
-.main-nav a i {
-  font-size: 1.2rem;
-}
-
-/* Testo dei link (ti permette di nasconderlo o ridurlo con .shrink se vuoi) */
-.link-text {
-  font-size: 1rem;
-}
-
-/* Hover */
 .main-nav a:hover {
-  color: #666;
-}
-
-/* SHINK: riduce padding, riduce dimensioni testo e icone */
-.main-nav.shrink {
-  padding: 0.3rem 1rem;
-}
-
-.main-nav.shrink a i {
-  font-size: 1rem; /* icona più piccola */
-}
-
-.main-nav.shrink .link-text {
-  font-size: 0.9rem;
+  color: #888;
 }
 
 /* Sezioni generiche */
 .section {
+  padding: 4rem 2rem; /* Ridotto un po' il padding in alto, non serve lo spazio per la navbar fissa */
   min-height: 100vh;
-  padding: 5rem 2rem;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
 }
 
-/* 
-  Siccome la nav è fixed in alto,
-  la prima sezione avrà un margin-top per evitare sovrapposizioni
-*/
-.section-benvenuto {
-  margin-top: 4rem;
-  background: #faf5f5;
-}
-
+/* Struttura contenuto centrale */
 .content {
   max-width: 800px;
   width: 100%;
@@ -99,6 +62,11 @@ body {
 }
 
 /* Benvenuto */
+.section-benvenuto {
+  background: #faf5f5;
+  /* Non serve più un padding-top extra per evitare la sovrapposizione */
+}
+
 .section-benvenuto .title {
   font-family: 'Playfair Display', serif;
   font-size: 3rem;
@@ -153,15 +121,17 @@ body {
 
 .info-images img {
   width: 200px;
+  height: auto;
   border-radius: 5px;
 }
 
-/* Logistica */
+/* Logistica: testo centrato */
 .logistica {
   text-align: center;
   margin-top: 2rem;
 }
 
+/* Mappa */
 .map-container {
   margin-top: 1rem;
 }
@@ -187,6 +157,7 @@ body {
 
 .viaggio-images img {
   width: 220px;
+  height: auto;
   border-radius: 5px;
 }
 
@@ -201,10 +172,13 @@ body {
   margin-bottom: 1rem;
 }
 
+.section-regalo p {
+  margin-bottom: 1rem;
+}
+
 .section-regalo .iban {
   font-size: 1.2rem;
   color: #444;
-  margin-bottom: 1rem;
 }
 
 .section-regalo .icon-heart {
@@ -232,6 +206,7 @@ body {
 
 .gallery-grid img {
   width: 100%;
+  height: auto;
   border-radius: 5px;
 }
 
@@ -243,7 +218,7 @@ body {
   font-size: 0.9rem;
 }
 
-/* Fade-in animation */
+/* Effetti di animazione (fade-in) */
 .fade-in {
   opacity: 0;
   transform: translateY(20px);
@@ -258,7 +233,8 @@ body {
 /* Responsive */
 @media (max-width: 768px) {
   .main-nav ul {
-    gap: 0.5rem;
+    flex-direction: column;
+    padding: 1rem;
   }
 
   .info-images,
@@ -267,22 +243,11 @@ body {
     display: grid;
     grid-template-columns: 1fr;
   }
-
+  
   .info-images img,
   .viaggio-images img {
     width: 100%;
     max-width: 300px;
-  }
-
-  .main-nav.shrink {
-    padding: 0.2rem 0.5rem;
-  }
-
-  .main-nav.shrink a i {
-    font-size: 0.9rem;
-  }
-
-  .main-nav.shrink .link-text {
-    font-size: 0.8rem;
+    margin: 0 auto;
   }
 }
