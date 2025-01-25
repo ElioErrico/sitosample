@@ -14,10 +14,20 @@ body {
   scroll-behavior: smooth;
 }
 
-/* Navbar: NON è più fissa, per evitare la barra in alto che resta */
+/* Classe per dimensionare le icone */
+.size-6 {
+  width: 24px;  /* o la dimensione che preferisci */
+  height: 24px;
+}
+
+/* Navbar */
 .main-nav {
-  background-color: #fff;
-  margin-bottom: 1rem; /* margine sotto la nav */
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background-color: #ffffffcc;
+  backdrop-filter: blur(5px);
+  z-index: 999;
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
@@ -26,7 +36,6 @@ body {
   display: flex;
   justify-content: center;
   padding: 0.5rem 1rem;
-  margin: 0;
 }
 
 .main-nav li {
@@ -38,6 +47,8 @@ body {
   color: #333;
   font-weight: 500;
   transition: color 0.3s ease;
+  display: inline-flex; /* per centrare meglio l'icona */
+  align-items: center;
 }
 
 .main-nav a:hover {
@@ -46,7 +57,7 @@ body {
 
 /* Sezioni generiche */
 .section {
-  padding: 4rem 2rem; /* Ridotto un po' il padding in alto, non serve lo spazio per la navbar fissa */
+  padding: 5rem 2rem;
   min-height: 100vh;
   display: flex;
   align-items: center;
@@ -64,7 +75,7 @@ body {
 /* Benvenuto */
 .section-benvenuto {
   background: #faf5f5;
-  /* Non serve più un padding-top extra per evitare la sovrapposizione */
+  padding-top: 6rem; 
 }
 
 .section-benvenuto .title {
@@ -74,7 +85,6 @@ body {
 }
 
 .section-benvenuto .subtitle {
-  font-family: 'Playfair Display', serif;
   font-size: 1.5rem;
   margin-bottom: 2rem;
   color: #666;
@@ -96,7 +106,7 @@ body {
   border-radius: 5px;
 }
 
-/* Informazioni Generali */
+/* Sezione Informazioni Generali */
 .section-info {
   background-color: #ffffff;
 }
@@ -111,32 +121,7 @@ body {
   margin-bottom: 1rem;
 }
 
-.info-images {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  justify-content: center;
-  margin: 2rem 0;
-}
-
-.info-images img {
-  width: 200px;
-  height: auto;
-  border-radius: 5px;
-}
-
-/* Logistica: testo centrato */
-.logistica {
-  text-align: center;
-  margin-top: 2rem;
-}
-
-/* Mappa */
-.map-container {
-  margin-top: 1rem;
-}
-
-/* Viaggio di Nozze */
+/* Sezione Viaggio di Nozze */
 .section-viaggio {
   background-color: #fafafa;
 }
@@ -147,21 +132,7 @@ body {
   margin-bottom: 1rem;
 }
 
-.viaggio-images {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  justify-content: center;
-  margin-top: 2rem;
-}
-
-.viaggio-images img {
-  width: 220px;
-  height: auto;
-  border-radius: 5px;
-}
-
-/* Regalo - IBAN */
+/* Sezione Regalo - IBAN */
 .section-regalo {
   background-color: #fff;
 }
@@ -186,7 +157,7 @@ body {
   color: red;
 }
 
-/* Galleria Fotografica */
+/* Sezione Galleria Fotografica */
 .section-galleria {
   background-color: #faf5f5;
 }
@@ -197,13 +168,25 @@ body {
   margin-bottom: 1rem;
 }
 
+/* =========================================
+   Layout comune per tutte le immagini 
+   (tranne quella in .hero-image)
+   ========================================= */
+.info-images,
+.viaggio-images,
 .gallery-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  /* Disposte in colonna, centrando orizzontalmente */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   gap: 1rem;
-  margin-top: 2rem;
+  /* Larghezza massima su desktop */
+  max-width: 600px;
+  margin: 2rem auto;
 }
 
+.info-images img,
+.viaggio-images img,
 .gallery-grid img {
   width: 100%;
   height: auto;
@@ -232,22 +215,21 @@ body {
 
 /* Responsive */
 @media (max-width: 768px) {
+  /* Se volevi mantenere la navbar orizzontale, 
+     lascia commentato il vecchio codice:
+  
   .main-nav ul {
     flex-direction: column;
     padding: 1rem;
   }
+  */
 
-  .info-images,
-  .viaggio-images,
-  .gallery-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-  }
-  
+  /* Stacking verticale anche su mobile 
+     (già impostato di base, ma se vuoi limitare 
+     la dimensione massima, puoi aggiungere regole qui) */
   .info-images img,
-  .viaggio-images img {
-    width: 100%;
+  .viaggio-images img,
+  .gallery-grid img {
     max-width: 300px;
-    margin: 0 auto;
   }
 }
