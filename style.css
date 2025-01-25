@@ -5,7 +5,7 @@
   box-sizing: border-box;
 }
 
-/* Impostazioni font generali */
+/* Font generali */
 body {
   font-family: 'Roboto', sans-serif;
   color: #333;
@@ -14,39 +14,9 @@ body {
   scroll-behavior: smooth;
 }
 
-/* Navbar: NON è più fissa, per evitare la barra in alto che resta */
-.main-nav {
-  background-color: #fff;
-  margin-bottom: 1rem; /* margine sotto la nav */
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
-
-.main-nav ul {
-  list-style: none;
-  display: flex;
-  justify-content: center;
-  padding: 0.5rem 1rem;
-  margin: 0;
-}
-
-.main-nav li {
-  margin: 0 1rem;
-}
-
-.main-nav a {
-  text-decoration: none;
-  color: #333;
-  font-weight: 500;
-  transition: color 0.3s ease;
-}
-
-.main-nav a:hover {
-  color: #888;
-}
-
 /* Sezioni generiche */
 .section {
-  padding: 4rem 2rem; /* Ridotto un po' il padding in alto, non serve lo spazio per la navbar fissa */
+  padding: 4rem 2rem;
   min-height: 100vh;
   display: flex;
   align-items: center;
@@ -54,17 +24,15 @@ body {
   flex-direction: column;
 }
 
-/* Struttura contenuto centrale */
 .content {
   max-width: 800px;
   width: 100%;
   text-align: center;
 }
 
-/* Benvenuto */
+/* Sezione Benvenuto */
 .section-benvenuto {
   background: #faf5f5;
-  /* Non serve più un padding-top extra per evitare la sovrapposizione */
 }
 
 .section-benvenuto .title {
@@ -125,7 +93,6 @@ body {
   border-radius: 5px;
 }
 
-/* Logistica: testo centrato */
 .logistica {
   text-align: center;
   margin-top: 2rem;
@@ -172,13 +139,10 @@ body {
   margin-bottom: 1rem;
 }
 
-.section-regalo p {
-  margin-bottom: 1rem;
-}
-
 .section-regalo .iban {
   font-size: 1.2rem;
   color: #444;
+  margin-bottom: 1rem;
 }
 
 .section-regalo .icon-heart {
@@ -218,7 +182,7 @@ body {
   font-size: 0.9rem;
 }
 
-/* Effetti di animazione (fade-in) */
+/* Fade-in animation */
 .fade-in {
   opacity: 0;
   transform: translateY(20px);
@@ -232,18 +196,13 @@ body {
 
 /* Responsive */
 @media (max-width: 768px) {
-  .main-nav ul {
-    flex-direction: column;
-    padding: 1rem;
-  }
-
   .info-images,
   .viaggio-images,
   .gallery-grid {
     display: grid;
     grid-template-columns: 1fr;
   }
-  
+
   .info-images img,
   .viaggio-images img {
     width: 100%;
