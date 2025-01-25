@@ -50,7 +50,7 @@ body {
 /* Sezioni generiche */
 .section {
   padding: 5rem 2rem;
-  min-height: 100vh; /* Per dare un effetto "pieno schermo" se desideri */
+  min-height: 100vh; /* Per dare un effetto "pieno schermo" */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -127,15 +127,10 @@ body {
   border-radius: 5px;
 }
 
+/* Logistica: testo centrato */
 .logistica {
   text-align: center;
   margin-top: 2rem;
-}
-
-
-.logistica h3 {
-  font-family: 'Playfair Display', serif;
-  margin-bottom: 0.5rem;
 }
 
 /* Mappa */
@@ -247,8 +242,8 @@ body {
   .info-images,
   .viaggio-images,
   .gallery-grid {
-    grid-template-columns: 1fr;
     display: grid;
+    grid-template-columns: 1fr;
   }
   
   .info-images img,
