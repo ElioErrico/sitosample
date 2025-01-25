@@ -14,9 +14,9 @@ body {
   scroll-behavior: smooth;
 }
 
-/* Classe per dimensionare le icone */
+/* Classe per dimensionare manualmente eventuali icone */
 .size-6 {
-  width: 24px;  /* o la dimensione che preferisci */
+  width: 24px;  
   height: 24px;
 }
 
@@ -49,6 +49,12 @@ body {
   transition: color 0.3s ease;
   display: inline-flex; /* per centrare meglio l'icona */
   align-items: center;
+}
+
+/* Forza la dimensione degli SVG nel nav */
+.main-nav a svg {
+  width: 24px;
+  height: 24px;
 }
 
 .main-nav a:hover {
@@ -168,20 +174,16 @@ body {
   margin-bottom: 1rem;
 }
 
-/* =========================================
-   Layout comune per tutte le immagini 
-   (tranne quella in .hero-image)
-   ========================================= */
+/* Impilamento verticale e larghezza massima per le immagini 
+   (eccetto l'immagine hero) */
 .info-images,
 .viaggio-images,
 .gallery-grid {
-  /* Disposte in colonna, centrando orizzontalmente */
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1rem;
-  /* Larghezza massima su desktop */
-  max-width: 600px;
+  max-width: 800px;
   margin: 2rem auto;
 }
 
@@ -215,18 +217,16 @@ body {
 
 /* Responsive */
 @media (max-width: 768px) {
-  /* Se volevi mantenere la navbar orizzontale, 
+  /* Se vuoi che la navbar resti sempre in fila, 
      lascia commentato il vecchio codice:
   
   .main-nav ul {
     flex-direction: column;
     padding: 1rem;
-  }
-  */
+  } */
 
-  /* Stacking verticale anche su mobile 
-     (già impostato di base, ma se vuoi limitare 
-     la dimensione massima, puoi aggiungere regole qui) */
+  /* Le immagini sono già impilate di default, 
+     qui puoi ridurre ulteriormente la larghezza se desideri */
   .info-images img,
   .viaggio-images img,
   .gallery-grid img {
