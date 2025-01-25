@@ -14,14 +14,82 @@ body {
   scroll-behavior: smooth;
 }
 
-/* Sezioni generiche */
-.section {
-  padding: 4rem 2rem;
-  min-height: 100vh;
+/* NAVBAR FISSA CON TESTO + ICONE DA FONT AWESOME */
+.main-nav {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 999;
+  background-color: #fff;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  transition: padding 0.3s ease;
+  padding: 0.8rem 1rem;
+}
+
+.main-nav ul {
+  list-style: none;
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 1rem;
+}
+
+/* Link + icone */
+.main-nav a {
+  text-decoration: none;
+  color: #333;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: 500;
+  transition: color 0.3s ease, opacity 0.3s ease;
+}
+
+/* Icone Font Awesome */
+.main-nav a i {
+  font-size: 1.2rem;
+}
+
+/* Testo dei link (ti permette di nasconderlo o ridurlo con .shrink se vuoi) */
+.link-text {
+  font-size: 1rem;
+}
+
+/* Hover */
+.main-nav a:hover {
+  color: #666;
+}
+
+/* SHINK: riduce padding, riduce dimensioni testo e icone */
+.main-nav.shrink {
+  padding: 0.3rem 1rem;
+}
+
+.main-nav.shrink a i {
+  font-size: 1rem; /* icona più piccola */
+}
+
+.main-nav.shrink .link-text {
+  font-size: 0.9rem;
+}
+
+/* Sezioni generiche */
+.section {
+  min-height: 100vh;
+  padding: 5rem 2rem;
+  display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 
+  Siccome la nav è fixed in alto,
+  la prima sezione avrà un margin-top per evitare sovrapposizioni
+*/
+.section-benvenuto {
+  margin-top: 4rem;
+  background: #faf5f5;
 }
 
 .content {
@@ -30,11 +98,7 @@ body {
   text-align: center;
 }
 
-/* Sezione Benvenuto */
-.section-benvenuto {
-  background: #faf5f5;
-}
-
+/* Benvenuto */
 .section-benvenuto .title {
   font-family: 'Playfair Display', serif;
   font-size: 3rem;
@@ -89,16 +153,15 @@ body {
 
 .info-images img {
   width: 200px;
-  height: auto;
   border-radius: 5px;
 }
 
+/* Logistica */
 .logistica {
   text-align: center;
   margin-top: 2rem;
 }
 
-/* Mappa */
 .map-container {
   margin-top: 1rem;
 }
@@ -124,7 +187,6 @@ body {
 
 .viaggio-images img {
   width: 220px;
-  height: auto;
   border-radius: 5px;
 }
 
@@ -170,7 +232,6 @@ body {
 
 .gallery-grid img {
   width: 100%;
-  height: auto;
   border-radius: 5px;
 }
 
@@ -196,6 +257,10 @@ body {
 
 /* Responsive */
 @media (max-width: 768px) {
+  .main-nav ul {
+    gap: 0.5rem;
+  }
+
   .info-images,
   .viaggio-images,
   .gallery-grid {
@@ -207,6 +272,17 @@ body {
   .viaggio-images img {
     width: 100%;
     max-width: 300px;
-    margin: 0 auto;
+  }
+
+  .main-nav.shrink {
+    padding: 0.2rem 0.5rem;
+  }
+
+  .main-nav.shrink a i {
+    font-size: 0.9rem;
+  }
+
+  .main-nav.shrink .link-text {
+    font-size: 0.8rem;
   }
 }
