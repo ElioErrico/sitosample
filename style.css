@@ -14,14 +14,10 @@ body {
   scroll-behavior: smooth;
 }
 
-/* Navbar */
+/* Navbar: NON è più fissa, per evitare la barra in alto che resta */
 .main-nav {
-  position: fixed;
-  top: 0;
-  width: 100%;
-  background-color: #ffffffcc; /* leggermente trasparente */
-  backdrop-filter: blur(5px);
-  z-index: 999;
+  background-color: #fff;
+  margin-bottom: 1rem; /* margine sotto la nav */
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
@@ -30,6 +26,7 @@ body {
   display: flex;
   justify-content: center;
   padding: 0.5rem 1rem;
+  margin: 0;
 }
 
 .main-nav li {
@@ -49,8 +46,8 @@ body {
 
 /* Sezioni generiche */
 .section {
-  padding: 5rem 2rem;
-  min-height: 100vh; /* Per dare un effetto "pieno schermo" */
+  padding: 4rem 2rem; /* Ridotto un po' il padding in alto, non serve lo spazio per la navbar fissa */
+  min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -66,8 +63,8 @@ body {
 
 /* Benvenuto */
 .section-benvenuto {
-  background: #faf5f5; /* Colore tenue/pastello */
-  padding-top: 6rem; /* Per evitare sovrapposizione con la nav fissa */
+  background: #faf5f5;
+  /* Non serve più un padding-top extra per evitare la sovrapposizione */
 }
 
 .section-benvenuto .title {
@@ -77,6 +74,7 @@ body {
 }
 
 .section-benvenuto .subtitle {
+  font-family: 'Playfair Display', serif;
   font-size: 1.5rem;
   margin-bottom: 2rem;
   color: #666;
@@ -238,7 +236,7 @@ body {
     flex-direction: column;
     padding: 1rem;
   }
-  
+
   .info-images,
   .viaggio-images,
   .gallery-grid {
