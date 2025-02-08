@@ -16,7 +16,7 @@ body {
 
 /* Classe per dimensionare manualmente eventuali icone */
 .size-6 {
-  width: 24px;  
+  width: 24px;
   height: 24px;
 }
 
@@ -73,7 +73,7 @@ body {
 /* Sezione Benvenuto */
 .section-benvenuto {
   background: #faf5f5;
-  padding-top: 6rem; 
+  padding-top: 6rem;
 }
 .section-benvenuto .title {
   font-family: 'Playfair Display', serif;
@@ -192,7 +192,7 @@ body {
 }
 
 /* Modal styling */
-/* Imposta la modal in flex mode per centrare il contenuto, senza padding-top */
+/* Modal in flex mode per centrare il contenuto */
 .modal {
   display: none; /* Nascosta di default */
   position: fixed;
