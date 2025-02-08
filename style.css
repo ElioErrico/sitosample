@@ -14,7 +14,7 @@ body {
   scroll-behavior: smooth;
 }
 
-/* Classe per dimensionare manualmente eventuali icone */
+/* Classe per dimensionare eventuali icone */
 .size-6 {
   width: 24px;
   height: 24px;
@@ -93,7 +93,7 @@ body {
 .hero-image {
   margin-top: 2rem;
 }
-/* Zoom-container per le immagini della home page */
+/* Container per ogni immagine con tasto zoom overlay */
 .zoom-container {
   position: relative;
   display: inline-block;
@@ -102,9 +102,9 @@ body {
   max-width: 100%;
   height: auto;
   border-radius: 5px;
-  cursor: default; /* Il semplice click non fa nulla */
+  cursor: default; /* Il semplice click non apre la modal */
 }
-/* Tasto di zoom overlay sui container (posizionato in basso a sinistra) */
+/* Tasto zoom overlay sui container (posizionato in basso a sinistra) */
 .home-zoom {
   position: absolute;
   bottom: 8px;
@@ -197,7 +197,7 @@ body {
   font-size: 0.9rem;
 }
 
-/* Effetti di animazione (fade-in) */
+/* Effetto fade-in */
 .fade-in {
   opacity: 0;
   transform: translateY(20px);
@@ -209,7 +209,7 @@ body {
 }
 
 /* Modal styling */
-/* Modal in flex mode per centrare il contenuto */
+/* La modal è nascosta di default con display: none; */
 .modal {
   display: none; /* Nascosta di default */
   position: fixed;
@@ -220,7 +220,7 @@ body {
   height: 100%;
   background-color: rgba(0,0,0,0.9);
   overflow: auto;
-  display: flex;
+  /* Quando la modal viene aperta via JS si imposterà display: flex */
   align-items: center;
   justify-content: center;
 }
