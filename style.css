@@ -225,12 +225,12 @@ body {
   position: fixed;
   top: 20px;
   right: 20px;
-  color: #fff;
+  color: #ffffff8f;
   cursor: pointer;
   transition: color 0.3s ease;
 }
 .modal-close:hover {
-  color: #bbb;
+  color: #ffffff8f;
 }
 
 /* Pulsante zoom: posizionato in basso a sinistra */
@@ -238,12 +238,12 @@ body {
   position: fixed;
   bottom: 20px;
   left: 20px;
-  color: #fff;
+  color: #ffffff8f;
   cursor: pointer;
   transition: color 0.3s ease;
 }
 .modal-zoom:hover {
-  color: #bbbbbb;
+  color: #ffffff8f;
 }
 
 /* Nuovo container per l'immagine con zoom button */
@@ -268,7 +268,7 @@ body {
 .img-container .zoom-btn svg {
   width: 20px;
   height: 20px;
-  fill: #fff;
+  fill: #ffffff8f;
 }
 
 /* Responsive */
