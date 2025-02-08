@@ -93,11 +93,30 @@ body {
 .hero-image {
   margin-top: 2rem;
 }
-.hero-image img {
+/* Zoom-container per le immagini della home page */
+.zoom-container {
+  position: relative;
+  display: inline-block;
+}
+.zoom-container img {
   max-width: 100%;
   height: auto;
   border-radius: 5px;
+  cursor: default; /* Il semplice click non fa nulla */
+}
+/* Tasto di zoom overlay sui container (posizionato in basso a sinistra) */
+.home-zoom {
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 4px;
+  border-radius: 4px;
   cursor: pointer;
+  transition: background 0.3s;
+}
+.home-zoom:hover {
+  background: rgba(0, 0, 0, 0.7);
 }
 
 /* Sezione Informazioni Generali */
@@ -153,8 +172,6 @@ body {
   font-size: 2rem;
   margin-bottom: 1rem;
 }
-.info-images,
-.viaggio-images,
 .gallery-grid {
   display: flex;
   flex-direction: column;
@@ -163,13 +180,13 @@ body {
   max-width: 800px;
   margin: 2rem auto;
 }
-.info-images img,
-.viaggio-images img,
-.gallery-grid img {
+.gallery-grid .zoom-container {
+  width: 100%;
+}
+.gallery-grid .zoom-container img {
   width: 100%;
   height: auto;
   border-radius: 5px;
-  cursor: pointer;
 }
 
 /* Footer */
@@ -203,6 +220,7 @@ body {
   height: 100%;
   background-color: rgba(0,0,0,0.9);
   overflow: auto;
+  display: flex;
   align-items: center;
   justify-content: center;
 }
@@ -230,19 +248,6 @@ body {
   transition: color 0.3s ease;
 }
 .modal-close:hover {
-  color: #bbb;
-}
-
-/* Pulsante zoom: posizionato in basso a sinistra */
-.modal-zoom {
-  position: absolute;
-  bottom: 20px;
-  left: 20px;
-  color: #fff;
-  cursor: pointer;
-  transition: color 0.3s ease;
-}
-.modal-zoom:hover {
   color: #bbb;
 }
 
