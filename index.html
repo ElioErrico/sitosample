@@ -195,19 +195,24 @@
     const modalClose = document.querySelector('.modal-close');
     const modalZoom = document.querySelector('.modal-zoom');
 
-    // // Funzione per aprire la modal
-    // function openModal(e) {
-    //   modal.style.display = "flex";  // attiva il flex per centrare il contenuto
-    //   if(this.tagName.toLowerCase() === "img") {
-    //     modalImg.src = this.src;
-    //   } else {
-    //     // Se l'evento parte dal container, recupera l'immagine interna
-    //     modalImg.src = this.querySelector('img').src;
-    //   }
-    //   // Rimuove eventuale stato zoom
-    //   modalImg.classList.remove('zoomed');
-    //   e.preventDefault();
-    // }
+    // Variabili per il pinch‑zoom e il panning
+    let scale = 1, posX = 0, posY = 0;
+    let isPinching = false, isDragging = false;
+    let startDist = 0;
+    let initialScale = 1;
+    let initialPos = { x: 0, y: 0 };
+    let anchor = { x: 0, y: 0 };
+    let lastX = 0, lastY = 0;
+
+    // Funzione per resettare lo stato dell'immagine in modal
+    function resetModalImage() {
+      scale = 1;
+      posX = 0;
+      posY = 0;
+      modalImg.style.transform = "none";
+    }
+
+    // Funzione per aprire la modal
     function openModal(e) {
       modal.style.display = "flex";  // attiva il flex per centrare il contenuto
       document.body.style.overflow = "hidden"; // disabilita lo scrolling della pagina
@@ -219,32 +224,29 @@
       }
       // Rimuove eventuale stato zoom
       modalImg.classList.remove('zoomed');
+      resetModalImage();
       e.preventDefault();
     }
-    // Aggiunge il bottone zoom su ogni immagine della home page e imposta l'apertura della modal con DOPPIO CLICK sul container
-    // oppure con un SINGOLO CLICK sul bottone zoom
+
+    // Aggiunge il bottone zoom su ogni immagine e imposta l'apertura della modal
     document.addEventListener('DOMContentLoaded', function() {
       const images = document.querySelectorAll('.hero-image img, .info-images img, .viaggio-images img, .gallery-grid img');
       images.forEach(img => {
         if (!img.parentElement.classList.contains('img-container')) {
-          // Avvolge l'immagine in un container
           const wrapper = document.createElement('div');
           wrapper.classList.add('img-container');
           img.parentNode.insertBefore(wrapper, img);
           wrapper.appendChild(img);
 
-          // Crea il bottone zoom
           const zoomBtn = document.createElement('div');
           zoomBtn.classList.add('zoom-btn');
           zoomBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
-  <path fill-rule="evenodd" d="M15 3.75a.75.75 0 0 1 .75-.75h4.5a.75.75 0 0 1 .75.75v4.5a.75.75 0 0 1-1.5 0V5.56l-3.97 3.97a.75.75 0 1 1-1.06-1.06l3.97-3.97h-2.69a.75.75 0 0 1-.75-.75Zm-12 0A.75.75 0 0 1 3.75 3h4.5a.75.75 0 0 1 0 1.5H5.56l3.97 3.97a.75.75 0 0 1-1.06 1.06L4.5 5.56v2.69a.75.75 0 0 1-1.5 0v-4.5Zm11.47 11.78a.75.75 0 1 1 1.06-1.06l3.97 3.97v-2.69a.75.75 0 0 1 1.5 0v4.5a.75.75 0 0 1-.75.75h-4.5a.75.75 0 0 1 0-1.5h2.69l-3.97-3.97Zm-4.94-1.06a.75.75 0 0 1 0 1.06L5.56 19.5h2.69a.75.75 0 0 1 0 1.5h-4.5a.75.75 0 0 1-.75-.75v-4.5a.75.75 0 0 1 1.5 0v2.69l3.97-3.97a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd" />
+  <path fill-rule="evenodd" d="M15 3.75a.75.75 0 0 1 .75-.75h4.5a.75.75 0 0 1 .75.75v4.5a.75.75 0 0 1-1.5 0V5.56l-3.97 3.97a.75.75 0 1 1-1.06-1.06l3.97-3.97h-2.69a.75.75 0 0 1-.75-.75Zm-12 0A.75.75 0 0 1 3.75 3h4.5a.75.75 0 0 1 0 1.5H5.56l3.97 3.97a.75.75 0 0 1-1.06 1.06L4.5 5.56v2.69a.75.75 0 0 1-1.5 0v-4.5Z" clip-rule="evenodd" />
+  <path fill-rule="evenodd" d="M11.47 16.28a.75.75 0 0 1 1.06 0l3.97 3.97v-2.69a.75.75 0 0 1 1.5 0v4.5a.75.75 0 0 1-.75.75h-4.5a.75.75 0 0 1 0-1.5h2.69l-3.97-3.97a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
 </svg>`;
           wrapper.appendChild(zoomBtn);
 
-          // Apertura della modal: 
-          // - il container risponde a DOPPIO CLICK
           wrapper.addEventListener('dblclick', openModal);
-          // - il bottone zoom risponde a SINGOLO CLICK
           zoomBtn.addEventListener('click', function(e) {
             e.stopPropagation();
             openModal.call(img, e);
@@ -252,11 +254,11 @@
         }
       });
     });
-    // Chiusura modal (SINGOLO CLICK sul tasto exit)
+
+    // Chiusura modal
     modalClose.addEventListener('click', function(e) {
       modal.style.display = "none";
       document.body.style.overflow = "";
-      // Se usi anche una classe 'zoomed', la rimuovi:
       modalImg.classList.remove('zoomed');
       resetModalImage();
       e.preventDefault();
@@ -271,117 +273,78 @@
       }
     });
 
-
-
-
-    // Gestione zoom in modal:
+    // Gestione zoom in modal
     modalZoom.addEventListener('click', function(e) {
       e.stopPropagation();
       modalImg.classList.toggle('zoomed');
-      modal.classList.toggle('zoom-active');  // Aggiunge o rimuove la classe per lo scroll corretto
+      modal.classList.toggle('zoom-active');
       e.preventDefault();
     });
 
-    // L'immagine in modal risponde a doppio click per lo zoom:
     modalImg.addEventListener('dblclick', function(e) {
       e.stopPropagation();
       modalImg.classList.toggle('zoomed');
-      modal.classList.toggle('zoom-active');  // Aggiunge o rimuove la classe per lo scroll corretto
+      modal.classList.toggle('zoom-active');
       e.preventDefault();
     });
-  // Variabili globali per il pinch‑zoom e il panning
-  let scale = 1, posX = 0, posY = 0;
-  let isPinching = false, isDragging = false;
-  let startDist = 0;
-  
-  // Variabili per memorizzare lo stato iniziale al momento del pinch
-  let initialScale = 1;
-  let initialPos = { x: 0, y: 0 };
-  let anchor = { x: 0, y: 0 }; // Punto in coordinate del container dove inizia il pinch
-  
-  // Per il panning a un dito
-  let lastX = 0, lastY = 0;
-  
-  /**
-   * Calcola la distanza tra due touch.
-   */
-  function getDistance(touch1, touch2) {
-    const dx = touch2.clientX - touch1.clientX;
-    const dy = touch2.clientY - touch1.clientY;
-    return Math.hypot(dx, dy);
-  }
-  
-  /**
-   * Aggiorna la trasformazione CSS dell'immagine.
-   */
-  function updateTransform() {
-    modalImg.style.transform = `translate(${posX}px, ${posY}px) scale(${scale})`;
-  }
-  
-  /**
-   * Gestione degli eventi touch
-   */
-  modalImg.addEventListener('touchstart', function(e) {
-    if (e.touches.length === 2) {
-      // Inizio del pinch‑zoom: memorizza lo stato iniziale
-      isPinching = true;
-      startDist = getDistance(e.touches[0], e.touches[1]);
-      initialScale = scale;
-      initialPos = { x: posX, y: posY };
-  
-      // Calcola il punto medio (ancora) relativo al container (modal)
-      const modalRect = modal.getBoundingClientRect();
-      anchor.x = ((e.touches[0].clientX + e.touches[1].clientX) / 2) - modalRect.left;
-      anchor.y = ((e.touches[0].clientY + e.touches[1].clientY) / 2) - modalRect.top;
-      
-      // Impostiamo il transform-origin a 0 0 (lo faremo anche in CSS)
-      // In questo modo le trasformazioni sono calcolate in coordinate "nate"
-    } else if (e.touches.length === 1 && scale > 1) {
-      // Inizio del panning a un dito (quando l'immagine è già ingrandita)
-      isDragging = true;
-      lastX = e.touches[0].clientX - posX;
-      lastY = e.touches[0].clientY - posY;
+
+    // Eventi touch con { passive: false }
+    modalImg.addEventListener('touchstart', function(e) {
+      if (e.touches.length === 2) {
+        isPinching = true;
+        startDist = getDistance(e.touches[0], e.touches[1]);
+        initialScale = scale;
+        initialPos = { x: posX, y: posY };
+
+        const modalRect = modal.getBoundingClientRect();
+        anchor.x = ((e.touches[0].clientX + e.touches[1].clientX) / 2) - modalRect.left;
+        anchor.y = ((e.touches[0].clientY + e.touches[1].clientY) / 2) - modalRect.top;
+      } else if (e.touches.length === 1 && scale > 1) {
+        isDragging = true;
+        lastX = e.touches[0].clientX - posX;
+        lastY = e.touches[0].clientY - posY;
+      }
+    }, { passive: false });
+
+    modalImg.addEventListener('touchmove', function(e) {
+      if (isPinching && e.touches.length === 2) {
+        let currentDist = getDistance(e.touches[0], e.touches[1]);
+        let newScale = initialScale * (currentDist / startDist);
+        if (newScale < 1) newScale = 1;
+        scale = newScale;
+
+        posX = initialPos.x + (1 - newScale / initialScale) * (anchor.x - initialPos.x);
+        posY = initialPos.y + (1 - newScale / initialScale) * (anchor.y - initialPos.y);
+
+        updateTransform();
+        e.preventDefault();
+      } else if (isDragging && e.touches.length === 1) {
+        posX = e.touches[0].clientX - lastX;
+        posY = e.touches[0].clientY - lastY;
+        updateTransform();
+        e.preventDefault();
+      }
+    }, { passive: false });
+
+    modalImg.addEventListener('touchend', function(e) {
+      if (e.touches.length < 2) {
+        isPinching = false;
+      }
+      if (e.touches.length === 0) {
+        isDragging = false;
+      }
+    }, { passive: false });
+
+    // Funzioni di utilità
+    function getDistance(touch1, touch2) {
+      const dx = touch2.clientX - touch1.clientX;
+      const dy = touch2.clientY - touch1.clientY;
+      return Math.hypot(dx, dy);
     }
-  });
-  
-  modalImg.addEventListener('touchmove', function(e) {
-    if (isPinching && e.touches.length === 2) {
-      // Calcola la distanza attuale tra le dita
-      let currentDist = getDistance(e.touches[0], e.touches[1]);
-      let newScale = initialScale * (currentDist / startDist);
-      if (newScale < 1) newScale = 1; // non consentiamo scale inferiori a 1
-      scale = newScale;
-      
-      // Calcola la nuova traduzione in modo che il punto "anchor" (fissato al touchstart)
-      // rimanga sotto le dita: la formula è
-      //     T_new = T_initial + (1 - newScale/initialScale) * (anchor - T_initial)
-      posX = initialPos.x + (1 - newScale / initialScale) * (anchor.x - initialPos.x);
-      posY = initialPos.y + (1 - newScale / initialScale) * (anchor.y - initialPos.y);
-      
-      updateTransform();
-      e.preventDefault();
-    } else if (isDragging && e.touches.length === 1) {
-      posX = e.touches[0].clientX - lastX;
-      posY = e.touches[0].clientY - lastY;
-      updateTransform();
-      e.preventDefault();
+
+    function updateTransform() {
+      modalImg.style.transform = `translate(${posX}px, ${posY}px) scale(${scale})`;
     }
-  });
-  
-  modalImg.addEventListener('touchend', function(e) {
-    if (e.touches.length < 2) {
-      isPinching = false;
-    }
-    if (e.touches.length === 0) {
-      isDragging = false;
-    }
-  });
-
-
-
-
-
   </script>
 </body>
 </html>
-
