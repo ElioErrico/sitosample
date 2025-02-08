@@ -253,7 +253,7 @@ body {
   color: #ffffff62;
 }
 
-/* Nuovo container per l'immagine con zoom button */
+/* Container per l'immagine con bottone zoom */
 .img-container {
   position: relative;
   display: inline-block;
