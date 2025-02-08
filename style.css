@@ -214,6 +214,9 @@ body {
   max-height: 90%;
   will-change: transform;
   transition: transform 0.1s ease-out;
+  will-change: transform;
+  transition: transform 0s; /* Nessun ritardo, per un movimento immediato */
+}
 }
 .modal-content.zoomed {
   max-width: none;
