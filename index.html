@@ -289,19 +289,21 @@
       modal.classList.toggle('zoom-active');  // Aggiunge o rimuove la classe per lo scroll corretto
       e.preventDefault();
     });
-  // Variabili globali per lo zoom e il panning
-  let scale = 1;         // Scala attuale
-  let lastScale = 1;     // Scala al momento dell'inizio del pinch
-  let posX = 0, posY = 0; // Traslazione corrente
-  let lastX = 0, lastY = 0; // Variabili per il panning (dentro touchmove)
-  let startDist = 0;     // Distanza iniziale tra i due touch
-  let isPinching = false;
-  let isDragging = false;
-  // Variabile per memorizzare il punto (in coordinate immagine) in cui si è iniziato il pinch
-  let initialPinch = { x: 0, y: 0 };
+  // Variabili globali per il pinch‑zoom e il panning
+  let scale = 1, posX = 0, posY = 0;
+  let isPinching = false, isDragging = false;
+  let startDist = 0;
+  
+  // Variabili per memorizzare lo stato iniziale al momento del pinch
+  let initialScale = 1;
+  let initialPos = { x: 0, y: 0 };
+  let anchor = { x: 0, y: 0 }; // Punto in coordinate del container dove inizia il pinch
+  
+  // Per il panning a un dito
+  let lastX = 0, lastY = 0;
   
   /**
-   * Calcola la distanza fra due touch.
+   * Calcola la distanza tra due touch.
    */
   function getDistance(touch1, touch2) {
     const dx = touch2.clientX - touch1.clientX;
@@ -310,69 +312,32 @@
   }
   
   /**
-   * (Opzionale) Funzione di elasticità per il panning.
-   * Se si vuole applicare un overscroll “a molla” quando si supera il limite, si può usare elasticClamp.
-   */
-  function elasticClamp(value, min, max) {
-    const elasticity = 0.3;
-    if (value < min) {
-      return min + (value - min) * elasticity;
-    } else if (value > max) {
-      return max + (value - max) * elasticity;
-    }
-    return value;
-  }
-  
-  /**
    * Aggiorna la trasformazione CSS dell'immagine.
-   * Se si desidera applicare un clamping (o elastic clamping) per evitare che l’immagine venga spostata troppo oltre, 
-   * si possono calcolare i limiti in base alle dimensioni effettive dell’immagine e del container.
    */
   function updateTransform() {
-    // Calcola le dimensioni effettive dell'immagine dopo lo scaling
-    const effectiveWidth = modalImg.naturalWidth * scale;
-    const effectiveHeight = modalImg.naturalHeight * scale;
-    
-    // Dimensioni del container (modal)
-    const containerWidth = modal.clientWidth;
-    const containerHeight = modal.clientHeight;
-    
-    // Calcola i limiti massimi di traslazione (per evitare che si mostri "spazio vuoto")
-    const maxTranslateX = Math.max((effectiveWidth - containerWidth) / 2, 0);
-    const maxTranslateY = Math.max((effectiveHeight - containerHeight) / 2, 0);
-    
-    // Applica elasticClamp (se si vuole effetto overscroll)
-    const elasticX = elasticClamp(posX, -maxTranslateX, maxTranslateX);
-    const elasticY = elasticClamp(posY, -maxTranslateY, maxTranslateY);
-    
-    modalImg.style.transform = `translate(${elasticX}px, ${elasticY}px) scale(${scale})`;
+    modalImg.style.transform = `translate(${posX}px, ${posY}px) scale(${scale})`;
   }
   
   /**
-   * Gestione degli eventi touch per pinch‑zoom e panning.
+   * Gestione degli eventi touch
    */
   modalImg.addEventListener('touchstart', function(e) {
     if (e.touches.length === 2) {
-      // Inizio del pinch‑zoom
+      // Inizio del pinch‑zoom: memorizza lo stato iniziale
       isPinching = true;
       startDist = getDistance(e.touches[0], e.touches[1]);
-      lastScale = scale;
-      
-      // Ottieni le coordinate del container (modal) – supponendo che modal sia full screen
+      initialScale = scale;
+      initialPos = { x: posX, y: posY };
+  
+      // Calcola il punto medio (ancora) relativo al container (modal)
       const modalRect = modal.getBoundingClientRect();
-      // Calcola il punto medio tra le dita, in coordinate relative al modal
-      const centerX = ((e.touches[0].clientX + e.touches[1].clientX) / 2) - modalRect.left;
-      const centerY = ((e.touches[0].clientY + e.touches[1].clientY) / 2) - modalRect.top;
+      anchor.x = ((e.touches[0].clientX + e.touches[1].clientX) / 2) - modalRect.left;
+      anchor.y = ((e.touches[0].clientY + e.touches[1].clientY) / 2) - modalRect.top;
       
-      // Calcola il punto in coordinate immagine (dato che transform-origin è 0 0)
-      // Considerando che attualmente la trasformazione è: translate(posX, posY) scale(scale)
-      // La posizione del punto nell'immagine è: (center - translation) / scale
-      initialPinch = {
-        x: (centerX - posX) / scale,
-        y: (centerY - posY) / scale
-      };
+      // Impostiamo il transform-origin a 0 0 (lo faremo anche in CSS)
+      // In questo modo le trasformazioni sono calcolate in coordinate "nate"
     } else if (e.touches.length === 1 && scale > 1) {
-      // Inizio del panning con un dito, se l’immagine è ingrandita
+      // Inizio del panning a un dito (quando l'immagine è già ingrandita)
       isDragging = true;
       lastX = e.touches[0].clientX - posX;
       lastY = e.touches[0].clientY - posY;
@@ -381,24 +346,21 @@
   
   modalImg.addEventListener('touchmove', function(e) {
     if (isPinching && e.touches.length === 2) {
-      const currentDist = getDistance(e.touches[0], e.touches[1]);
-      let newScale = lastScale * (currentDist / startDist);
-      if (newScale < 1) newScale = 1;
+      // Calcola la distanza attuale tra le dita
+      let currentDist = getDistance(e.touches[0], e.touches[1]);
+      let newScale = initialScale * (currentDist / startDist);
+      if (newScale < 1) newScale = 1; // non consentiamo scale inferiori a 1
       scale = newScale;
       
-      // Ottieni di nuovo le coordinate relative al modal
-      const modalRect = modal.getBoundingClientRect();
-      const centerXNew = ((e.touches[0].clientX + e.touches[1].clientX) / 2) - modalRect.left;
-      const centerYNew = ((e.touches[0].clientY + e.touches[1].clientY) / 2) - modalRect.top;
-      
-      // Aggiorna posX e posY in modo che il punto (initialPinch) rimanga sotto il punto medio delle dita
-      posX = centerXNew - (initialPinch.x * scale);
-      posY = centerYNew - (initialPinch.y * scale);
+      // Calcola la nuova traduzione in modo che il punto "anchor" (fissato al touchstart)
+      // rimanga sotto le dita: la formula è
+      //     T_new = T_initial + (1 - newScale/initialScale) * (anchor - T_initial)
+      posX = initialPos.x + (1 - newScale / initialScale) * (anchor.x - initialPos.x);
+      posY = initialPos.y + (1 - newScale / initialScale) * (anchor.y - initialPos.y);
       
       updateTransform();
-      e.preventDefault();  // Previene lo zoom nativo del browser
+      e.preventDefault();
     } else if (isDragging && e.touches.length === 1) {
-      // Panning con un dito (quando l'immagine è già ingrandita)
       posX = e.touches[0].clientX - lastX;
       posY = e.touches[0].clientY - lastY;
       updateTransform();
@@ -414,35 +376,7 @@
       isDragging = false;
     }
   });
-  
-  /**
-   * Resetta lo stato dell'immagine (da chiamare alla chiusura della modal).
-   */
-  function resetModalImage() {
-    scale = 1;
-    lastScale = 1;
-    posX = 0;
-    posY = 0;
-    modalImg.style.transform = 'none';
-  }
-  
-  // Assicurati di integrare il reset anche quando la modal si chiude:
-  modalClose.addEventListener('click', function(e) {
-    modal.style.display = "none";
-    document.body.style.overflow = "";
-    modalImg.classList.remove('zoomed'); // Se usi anche questa classe
-    resetModalImage();
-    e.preventDefault();
-  });
-  
-  modal.addEventListener('click', function(e) {
-    if (e.target === modal) {
-      modal.style.display = "none";
-      document.body.style.overflow = "";
-      modalImg.classList.remove('zoomed');
-      resetModalImage();
-    }
-  });
+
 
 
 
