@@ -214,8 +214,9 @@ body {
   max-height: 90%;
   will-change: transform;
   transition: transform 0.1s ease-out;
+  transform-origin: 0 0;  /* Imposta l'origine in alto a sinistra */
   will-change: transform;
-  transition: transform 0s; /* Nessun ritardo, per un movimento immediato */
+  transition: transform 0s;  /* Nessun ritardo per una risposta immediata */
 }
 }
 .modal-content.zoomed {
