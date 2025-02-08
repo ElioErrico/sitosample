@@ -255,20 +255,22 @@
     // Chiusura modal (SINGOLO CLICK sul tasto exit)
     modalClose.addEventListener('click', function(e) {
       modal.style.display = "none";
-      document.body.style.overflow = ""; // ripristina lo scrolling
+      document.body.style.overflow = "";
+      // Se usi anche una classe 'zoomed', la rimuovi:
       modalImg.classList.remove('zoomed');
-      modal.classList.remove('zoom-active');
+      resetModalImage();
       e.preventDefault();
     });
-
+    
     modal.addEventListener('click', function(e) {
-      if(e.target === modal) {
+      if (e.target === modal) {
         modal.style.display = "none";
-        document.body.style.overflow = ""; // ripristina lo scrolling
+        document.body.style.overflow = "";
         modalImg.classList.remove('zoomed');
-        modal.classList.remove('zoom-active');
+        resetModalImage();
       }
     });
+
 
 
 
@@ -287,6 +289,79 @@
       modal.classList.toggle('zoom-active');  // Aggiunge o rimuove la classe per lo scroll corretto
       e.preventDefault();
     });
+  // Variabili globali per la trasformazione dell'immagine in modal
+let scale = 1;         // scala attuale
+let lastScale = 1;     // scala al momento dell'inizio del pinch
+let posX = 0, posY = 0; // traslazione corrente
+let lastX = 0, lastY = 0; // posizione iniziale al panning
+let startDist = 0;     // distanza iniziale tra i due touch
+let isPinching = false;
+let isDragging = false;
+
+// Funzione per calcolare la distanza fra due touch
+function getDistance(touch1, touch2) {
+  const dx = touch2.clientX - touch1.clientX;
+  const dy = touch2.clientY - touch1.clientY;
+  return Math.hypot(dx, dy);
+}
+
+// Funzione per aggiornare la trasformazione sull'immagine
+function updateTransform() {
+  // Applichiamo prima lo scale e poi il translate
+  modalImg.style.transform = `scale(${scale}) translate(${posX}px, ${posY}px)`;
+}
+
+// Listener per il tocco sull'immagine in modal
+modalImg.addEventListener('touchstart', function(e) {
+  if (e.touches.length === 2) {
+    // Avvio pinch-zoom
+    isPinching = true;
+    startDist = getDistance(e.touches[0], e.touches[1]);
+    lastScale = scale;
+  } else if (e.touches.length === 1 && scale > 1) {
+    // Se l'immagine è ingrandita, avvia il panning con un dito
+    isDragging = true;
+    lastX = e.touches[0].clientX - posX;
+    lastY = e.touches[0].clientY - posY;
+  }
+});
+
+modalImg.addEventListener('touchmove', function(e) {
+  if (isPinching && e.touches.length === 2) {
+    const currentDist = getDistance(e.touches[0], e.touches[1]);
+    // Calcola il nuovo fattore di scala in base al rapporto tra distanza corrente e distanza iniziale
+    scale = lastScale * (currentDist / startDist);
+    if (scale < 1) {
+      scale = 1; // non permettere di ridurre oltre la dimensione originale
+    }
+    updateTransform();
+    e.preventDefault();  // previene il comportamento predefinito (lo zoom dell'intera pagina)
+  } else if (isDragging && e.touches.length === 1) {
+    // Aggiorna la traslazione in base al movimento
+    posX = e.touches[0].clientX - lastX;
+    posY = e.touches[0].clientY - lastY;
+    updateTransform();
+    e.preventDefault();
+  }
+});
+
+modalImg.addEventListener('touchend', function(e) {
+  if (e.touches.length < 2) {
+    isPinching = false;
+  }
+  if (e.touches.length === 0) {
+    isDragging = false;
+  }
+});
+
+// Funzione per resettare lo stato dell'immagine (da chiamare quando la modal si chiude)
+function resetModalImage() {
+  scale = 1;
+  lastScale = 1;
+  posX = 0;
+  posY = 0;
+  modalImg.style.transform = 'none';
+}
 
   </script>
 </body>
