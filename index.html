@@ -195,7 +195,19 @@
     const modalClose = document.querySelector('.modal-close');
     const modalZoom = document.querySelector('.modal-zoom');
 
-    // Funzione per aprire la modal
+    // // Funzione per aprire la modal
+    // function openModal(e) {
+    //   modal.style.display = "flex";  // attiva il flex per centrare il contenuto
+    //   if(this.tagName.toLowerCase() === "img") {
+    //     modalImg.src = this.src;
+    //   } else {
+    //     // Se l'evento parte dal container, recupera l'immagine interna
+    //     modalImg.src = this.querySelector('img').src;
+    //   }
+    //   // Rimuove eventuale stato zoom
+    //   modalImg.classList.remove('zoomed');
+    //   e.preventDefault();
+    // }
     function openModal(e) {
       modal.style.display = "flex";  // attiva il flex per centrare il contenuto
       document.body.style.overflow = "hidden"; // disabilita lo scrolling della pagina
@@ -209,7 +221,6 @@
       modalImg.classList.remove('zoomed');
       e.preventDefault();
     }
-
     // Aggiunge il bottone zoom su ogni immagine della home page e imposta l'apertura della modal con DOPPIO CLICK sul container
     // oppure con un SINGOLO CLICK sul bottone zoom
     document.addEventListener('DOMContentLoaded', function() {
@@ -241,19 +252,22 @@
         }
       });
     });
-
     // Chiusura modal (SINGOLO CLICK sul tasto exit)
     modalClose.addEventListener('click', function(e) {
       modal.style.display = "none";
+      document.body.style.overflow = ""; // ripristina lo scrolling
       modalImg.classList.remove('zoomed');
       e.preventDefault();
     });
-    modal.addEventListener('click', function(e){
+
+    modal.addEventListener('click', function(e) {
       if(e.target === modal) {
         modal.style.display = "none";
+        document.body.style.overflow = ""; // ripristina lo scrolling
         modalImg.classList.remove('zoomed');
       }
     });
+
 
     // Gestione zoom in modal:
     // - il bottone zoom nella modal risponde a SINGOLO CLICK
@@ -271,3 +285,4 @@
   </script>
 </body>
 </html>
+
