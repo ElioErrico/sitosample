@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="description" content="Elio &amp; Marti - Il nostro giorno speciale. Informazioni sul matrimonio, viaggio di nozze e galleria fotografica." />
   <meta name="keywords" content="Matrimonio, Elio, Marti, Viaggio di nozze, IBAN, Cerimonia" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Elio &amp; Marti - 2 Cuori e 1 Capanna</title>
   
   <!-- Collegamento Google Fonts -->
@@ -257,6 +257,7 @@
       modal.style.display = "none";
       document.body.style.overflow = ""; // ripristina lo scrolling
       modalImg.classList.remove('zoomed');
+      modal.classList.remove('zoom-active');
       e.preventDefault();
     });
 
@@ -265,23 +266,28 @@
         modal.style.display = "none";
         document.body.style.overflow = ""; // ripristina lo scrolling
         modalImg.classList.remove('zoomed');
+        modal.classList.remove('zoom-active');
       }
     });
 
 
+
     // Gestione zoom in modal:
-    // - il bottone zoom nella modal risponde a SINGOLO CLICK
     modalZoom.addEventListener('click', function(e) {
       e.stopPropagation();
       modalImg.classList.toggle('zoomed');
+      modal.classList.toggle('zoom-active');  // Aggiunge o rimuove la classe per lo scroll corretto
       e.preventDefault();
     });
-    // - l'immagine in modal risponde a DOPPIO CLICK per lo zoom
+
+    // L'immagine in modal risponde a doppio click per lo zoom:
     modalImg.addEventListener('dblclick', function(e) {
       e.stopPropagation();
       modalImg.classList.toggle('zoomed');
+      modal.classList.toggle('zoom-active');  // Aggiunge o rimuove la classe per lo scroll corretto
       e.preventDefault();
     });
+
   </script>
 </body>
 </html>
