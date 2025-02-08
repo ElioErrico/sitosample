@@ -198,6 +198,7 @@
     // Funzione per aprire la modal
     function openModal(e) {
       modal.style.display = "flex";  // attiva il flex per centrare il contenuto
+      document.body.style.overflow = "hidden"; // disabilita lo scrolling della pagina
       if(this.tagName.toLowerCase() === "img") {
         modalImg.src = this.src;
       } else {
