@@ -257,7 +257,7 @@ body {
   position: absolute;
   bottom: 15px;
   left: 5px;
-  background: rgba(0, 0, 0, 0.199);
+  background: rgba(0, 0, 0, 0.075);
   padding: 3px;
   border-radius: 3px;
   cursor: pointer;
