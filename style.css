@@ -233,6 +233,14 @@ body {
   color: #ffffff62;
 }
 
+/* Quando l'immagine è zoomata, la modal non centra più il contenuto ma lo allinea in alto a sinistra,
+   così da permettere lo scroll completo della foto */
+   .modal.zoom-active {
+    align-items: flex-start;
+    justify-content: flex-start;
+  }
+  
+
 /* Pulsante zoom: posizionato in basso a sinistra */
 .modal-zoom {
   position: fixed;
