@@ -169,7 +169,8 @@
     <!-- Pulsante zoom in basso a sinistra -->
     <span class="modal-zoom" title="Ingrandisci">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
-        <path fill-rule="evenodd" d="M15 3.75a.75.75 0 0 1 .75-.75h4.5a.75.75 0 0 1 .75.75v4.5a.75.75 0 0 1-1.5 0V5.56l-3.97 3.97a.75.75 0 1 1-1.06-1.06l3.97-3.97h-2.69a.75.75 0 0 1-.75-.75Zm-12 0A.75.75 0 0 1 3.75 3h4.5a.75.75 0 0 1 0 1.5H5.56l3.97 3.97a.75.75 0 0 1-1.06 1.06L4.5 5.56v2.69a.75.75 0 0 1-1.5 0v-4.5Zm11.47 11.78a.75.75 0 1 1 1.06-1.06l3.97 3.97v-2.69a.75.75 0 0 1 1.5 0v4.5a.75.75 0 0 1-.75.75h-4.5a.75.75 0 0 1 0-1.5h2.69l-3.97-3.97Zm-4.94-1.06a.75.75 0 0 1 0 1.06L5.56 19.5h2.69a.75.75 0 0 1 0 1.5h-4.5a.75.75 0 0 1-.75-.75v-4.5a.75.75 0 0 1 1.5 0v2.69l3.97-3.97a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd" />
+        <path fill-rule="evenodd" d="M15 3.75a.75.75 0 0 1 .75-.75h4.5a.75.75 0 0 1 .75.75v4.5a.75.75 0 0 1-1.5 0V5.56l-3.97 3.97a.75.75 0 1 1-1.06-1.06l3.97-3.97h-2.69a.75.75 0 0 1-.75-.75Zm-12 0A.75.75 0 0 1 3.75 3h4.5a.75.75 0 0 1 0 1.5H5.56l3.97 3.97a.75.75 0 0 1-1.06 1.06L4.5 5.56v2.69a.75.75 0 0 1-1.5 0v-4.5Z" clip-rule="evenodd" />
+        <path fill-rule="evenodd" d="M11.47 16.28a.75.75 0 0 1 1.06 0l3.97 3.97v-2.69a.75.75 0 0 1 1.5 0v4.5a.75.75 0 0 1-.75.75h-4.5a.75.75 0 0 1 0-1.5h2.69l-3.97-3.97a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
       </svg>
     </span>
     <img class="modal-content" id="modalImage" alt="Immagine ingrandita" />
@@ -189,13 +190,13 @@
     }, options);
     faders.forEach(fader => observer.observe(fader));
 
-    // Gestione Modal
+    // Gestione Modal e pinch‑zoom
     const modal = document.getElementById('imageModal');
     const modalImg = document.getElementById('modalImage');
     const modalClose = document.querySelector('.modal-close');
     const modalZoom = document.querySelector('.modal-zoom');
 
-    // Variabili per il pinch‑zoom e il panning
+    // Variabili per zoom e panning
     let scale = 1, posX = 0, posY = 0;
     let isPinching = false, isDragging = false;
     let startDist = 0;
@@ -203,8 +204,9 @@
     let initialPos = { x: 0, y: 0 };
     let anchor = { x: 0, y: 0 };
     let lastX = 0, lastY = 0;
+    let originalWidth = 0, originalHeight = 0;
 
-    // Funzione per resettare lo stato dell'immagine in modal
+    // Resetta lo stato dell'immagine in modal
     function resetModalImage() {
       scale = 1;
       posX = 0;
@@ -216,16 +218,21 @@
     function openModal(e) {
       modal.style.display = "flex";  // attiva il flex per centrare il contenuto
       document.body.style.overflow = "hidden"; // disabilita lo scrolling della pagina
-      if(this.tagName.toLowerCase() === "img") {
+      if (this.tagName.toLowerCase() === "img") {
         modalImg.src = this.src;
       } else {
-        // Se l'evento parte dal container, recupera l'immagine interna
         modalImg.src = this.querySelector('img').src;
       }
-      // Rimuove eventuale stato zoom
       modalImg.classList.remove('zoomed');
       resetModalImage();
       e.preventDefault();
+
+      // Una volta caricata l'immagine, ne rileviamo le dimensioni iniziali
+      modalImg.onload = function() {
+        const rect = modalImg.getBoundingClientRect();
+        originalWidth = rect.width;
+        originalHeight = rect.height;
+      }
     }
 
     // Aggiunge il bottone zoom su ogni immagine e imposta l'apertura della modal
@@ -241,7 +248,7 @@
           const zoomBtn = document.createElement('div');
           zoomBtn.classList.add('zoom-btn');
           zoomBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
-  <path fill-rule="evenodd" d="M15 3.75a.75.75 0 0 1 .75-.75h4.5a.75.75 0 0 1 .75.75v4.5a.75.75 0 0 1-1.5 0V5.56l-3.97 3.97a.75.75 0 1 1-1.06-1.06l3.97-3.97h-2.69a.75.75 0 0 1-.75-.75Zm-12 0A.75.75 0 0 1 3.75 3h4.5a.75.75 0 0 1 0 1.5H5.56l3.97 3.97a.75.75 0 0 1-1.06 1.06L4.5 5.56v2.69a.75.75 0 0 1-1.5 0v-4.5Z" clip-rule="evenodd" />
+  <path fill-rule="evenodd" d="M15 3.75a.75.75 0 0 1 .75-.75h4.5a.75.75 0 0 1 .75.75v4.5a.75.75 0 0 1-1.5 0V5.56l-3.97 3.97a.75.75 0 1 1-1.06-1.06l3.97-3.97h-2.69a.75.75 0 0 1-.75-.75Z" clip-rule="evenodd" />
   <path fill-rule="evenodd" d="M11.47 16.28a.75.75 0 0 1 1.06 0l3.97 3.97v-2.69a.75.75 0 0 1 1.5 0v4.5a.75.75 0 0 1-.75.75h-4.5a.75.75 0 0 1 0-1.5h2.69l-3.97-3.97a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
 </svg>`;
           wrapper.appendChild(zoomBtn);
@@ -273,7 +280,7 @@
       }
     });
 
-    // Gestione zoom in modal
+    // Gestione zoom in modal (tasto zoom e doppio click)
     modalZoom.addEventListener('click', function(e) {
       e.stopPropagation();
       modalImg.classList.toggle('zoomed');
@@ -288,7 +295,40 @@
       e.preventDefault();
     });
 
-    // Eventi touch con { passive: false }
+    // Funzione per limitare il trascinamento dell'immagine (clamping)
+    function clampPosition() {
+      const containerWidth = modal.clientWidth;
+      const containerHeight = modal.clientHeight;
+      const effectiveWidth = originalWidth * scale;
+      const effectiveHeight = originalHeight * scale;
+      let minPosX = containerWidth - effectiveWidth;
+      let maxPosX = 0;
+      let minPosY = containerHeight - effectiveHeight;
+      let maxPosY = 0;
+
+      // Se l'immagine è più larga del contenitore, limitiamo il movimento orizzontale
+      if (effectiveWidth > containerWidth) {
+        if (posX < minPosX) posX = minPosX;
+        if (posX > maxPosX) posX = maxPosX;
+      } else {
+        posX = (containerWidth - effectiveWidth) / 2;
+      }
+      // Analogamente per il movimento verticale
+      if (effectiveHeight > containerHeight) {
+        if (posY < minPosY) posY = minPosY;
+        if (posY > maxPosY) posY = maxPosY;
+      } else {
+        posY = (containerHeight - effectiveHeight) / 2;
+      }
+    }
+
+    // Aggiorna la trasformazione applicata all'immagine, includendo il clamping
+    function updateTransform() {
+      clampPosition();
+      modalImg.style.transform = `translate(${posX}px, ${posY}px) scale(${scale})`;
+    }
+
+    // Gestione degli eventi touch con { passive: false }
     modalImg.addEventListener('touchstart', function(e) {
       if (e.touches.length === 2) {
         isPinching = true;
@@ -313,6 +353,7 @@
         if (newScale < 1) newScale = 1;
         scale = newScale;
 
+        // Calcolo della nuova traslazione affinché il punto "anchor" rimanga sotto le dita
         posX = initialPos.x + (1 - newScale / initialScale) * (anchor.x - initialPos.x);
         posY = initialPos.y + (1 - newScale / initialScale) * (anchor.y - initialPos.y);
 
@@ -326,24 +367,24 @@
       }
     }, { passive: false });
 
+    // Se viene rilasciato un dito durante il pinch, passa in modalità drag per evitare salti
     modalImg.addEventListener('touchend', function(e) {
-      if (e.touches.length < 2) {
+      if (e.touches.length === 1) {
         isPinching = false;
+        isDragging = true;
+        lastX = e.touches[0].clientX - posX;
+        lastY = e.touches[0].clientY - posY;
       }
       if (e.touches.length === 0) {
         isDragging = false;
       }
     }, { passive: false });
 
-    // Funzioni di utilità
+    // Funzione di utilità per calcolare la distanza tra due touch
     function getDistance(touch1, touch2) {
       const dx = touch2.clientX - touch1.clientX;
       const dy = touch2.clientY - touch1.clientY;
       return Math.hypot(dx, dy);
-    }
-
-    function updateTransform() {
-      modalImg.style.transform = `translate(${posX}px, ${posY}px) scale(${scale})`;
     }
   </script>
 </body>
