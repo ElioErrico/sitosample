@@ -14,7 +14,7 @@ body {
   scroll-behavior: smooth;
 }
 
-/* Classe per dimensionare eventuali icone */
+/* Classe per dimensionare manualmente eventuali icone */
 .size-6 {
   width: 24px;
   height: 24px;
@@ -93,30 +93,11 @@ body {
 .hero-image {
   margin-top: 2rem;
 }
-/* Container per ogni immagine con tasto zoom overlay */
-.zoom-container {
-  position: relative;
-  display: inline-block;
-}
-.zoom-container img {
+.hero-image img {
   max-width: 100%;
   height: auto;
   border-radius: 5px;
-  cursor: default; /* Il semplice click non apre la modal */
-}
-/* Tasto zoom overlay sui container (posizionato in basso a sinistra) */
-.home-zoom {
-  position: absolute;
-  bottom: 8px;
-  left: 8px;
-  background: rgba(0, 0, 0, 0.5);
-  padding: 4px;
-  border-radius: 4px;
   cursor: pointer;
-  transition: background 0.3s;
-}
-.home-zoom:hover {
-  background: rgba(0, 0, 0, 0.7);
 }
 
 /* Sezione Informazioni Generali */
@@ -172,6 +153,8 @@ body {
   font-size: 2rem;
   margin-bottom: 1rem;
 }
+.info-images,
+.viaggio-images,
 .gallery-grid {
   display: flex;
   flex-direction: column;
@@ -180,13 +163,13 @@ body {
   max-width: 800px;
   margin: 2rem auto;
 }
-.gallery-grid .zoom-container {
-  width: 100%;
-}
-.gallery-grid .zoom-container img {
+.info-images img,
+.viaggio-images img,
+.gallery-grid img {
   width: 100%;
   height: auto;
   border-radius: 5px;
+  cursor: pointer;
 }
 
 /* Footer */
@@ -197,7 +180,7 @@ body {
   font-size: 0.9rem;
 }
 
-/* Effetto fade-in */
+/* Effetti di animazione (fade-in) */
 .fade-in {
   opacity: 0;
   transform: translateY(20px);
@@ -209,9 +192,9 @@ body {
 }
 
 /* Modal styling */
-/* La modal è nascosta di default con display: none; */
+/* Modal in flex mode per centrare il contenuto */
 .modal {
-  display: none; /* Nascosta di default */
+  display: none;
   position: fixed;
   z-index: 1000;
   left: 0;
@@ -220,7 +203,6 @@ body {
   height: 100%;
   background-color: rgba(0,0,0,0.9);
   overflow: auto;
-  /* Quando la modal viene aperta via JS si imposterà display: flex */
   align-items: center;
   justify-content: center;
 }
@@ -249,6 +231,44 @@ body {
 }
 .modal-close:hover {
   color: #bbb;
+}
+
+/* Pulsante zoom: posizionato in basso a sinistra */
+.modal-zoom {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  color: #fff;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+.modal-zoom:hover {
+  color: #bbbbbb;
+}
+
+/* Nuovo container per l'immagine con zoom button */
+.img-container {
+  position: relative;
+  display: inline-block;
+}
+
+/* Bottone zoom posizionato in basso a sinistra */
+.img-container .zoom-btn {
+  position: absolute;
+  bottom: 15px;
+  left: 5px;
+  background: rgba(0, 0, 0, 0.199);
+  padding: 3px;
+  border-radius: 3px;
+  cursor: pointer;
+  z-index: 10;
+}
+
+/* Regola per l'icona all'interno del bottone */
+.img-container .zoom-btn svg {
+  width: 20px;
+  height: 20px;
+  fill: #fff;
 }
 
 /* Responsive */
