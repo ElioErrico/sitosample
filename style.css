@@ -192,7 +192,6 @@ body {
 }
 
 /* Modal styling */
-/* Modal in flex mode per centrare il contenuto */
 .modal {
   display: none;
   position: fixed;
@@ -212,12 +211,8 @@ body {
   display: block;
   max-width: 90%;
   max-height: 90%;
-  will-change: transform;
+  transform-origin: 0 0;
   transition: transform 0.1s ease-out;
-  transform-origin: 0 0;  /* Imposta l'origine in alto a sinistra */
-  will-change: transform;
-  transition: transform 0s;  /* Nessun ritardo per una risposta immediata */
-}
 }
 .modal-content.zoomed {
   max-width: none;
@@ -239,13 +234,11 @@ body {
   color: #ffffff62;
 }
 
-/* Quando l'immagine è zoomata, la modal non centra più il contenuto ma lo allinea in alto a sinistra,
-   così da permettere lo scroll completo della foto */
-   .modal.zoom-active {
-    align-items: flex-start;
-    justify-content: flex-start;
-  }
-  
+/* Quando l'immagine è zoomata, la modal non centra più il contenuto */
+.modal.zoom-active {
+  align-items: flex-start;
+  justify-content: flex-start;
+}
 
 /* Pulsante zoom: posizionato in basso a sinistra */
 .modal-zoom {
@@ -265,8 +258,6 @@ body {
   position: relative;
   display: inline-block;
 }
-
-/* Bottone zoom posizionato in basso a sinistra */
 .img-container .zoom-btn {
   position: absolute;
   bottom: 15px;
@@ -277,8 +268,6 @@ body {
   cursor: pointer;
   z-index: 10;
 }
-
-/* Regola per l'icona all'interno del bottone */
 .img-container .zoom-btn svg {
   width: 20px;
   height: 20px;
