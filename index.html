@@ -299,7 +299,7 @@
   let isDragging = false;
   
   /**
-   * Funzione per calcolare la distanza fra due touch
+   * Calcola la distanza fra due touch.
    */
   function getDistance(touch1, touch2) {
     const dx = touch2.clientX - touch1.clientX;
@@ -308,20 +308,24 @@
   }
   
   /**
-   * Funzione di clamping: restituisce il valore limitato tra min e max.
+   * Funzione di elastic clamping.
+   * Se il valore supera i limiti, viene applicato un fattore di elasticità (ad es. 0.3)
+   * per far sentire l’overscroll in modo naturale.
    */
-  function clamp(value, min, max) {
-    return Math.min(Math.max(value, min), max);
+  function elasticClamp(value, min, max) {
+    const elasticity = 0.3;
+    if (value < min) {
+      return min + (value - min) * elasticity;
+    } else if (value > max) {
+      return max + (value - max) * elasticity;
+    }
+    return value;
   }
   
   /**
-   * Aggiorna la trasformazione CSS dell'immagine applicando translate e scale.
-   * In questo esempio la trasformazione viene applicata come:
-   *    translate(x, y) scale(s)
-   * in modo che la traslazione non venga ulteriormente scalata.
-   * Vengono inoltre calcolati i limiti di traslazione in base alla dimensione effettiva
-   * dell'immagine (misurata tramite modalImg.naturalWidth e .naturalHeight) e alla dimensione
-   * del container (.modal).
+   * Aggiorna la trasformazione CSS dell'immagine:
+   * - Calcola i limiti in base alle dimensioni dell’immagine e del container.
+   * - Applica un elasticClamp per far “sentire” meglio il movimento.
    */
   function updateTransform() {
     // Dimensioni del container (modal)
@@ -332,16 +336,16 @@
     const effectiveWidth = modalImg.naturalWidth * scale;
     const effectiveHeight = modalImg.naturalHeight * scale;
     
-    // Calcola i limiti di traslazione per evitare che vengano mostrati spazi vuoti
+    // Calcola i limiti massimi di traduzione
     const maxTranslateX = Math.max((effectiveWidth - containerWidth) / 2, 0);
     const maxTranslateY = Math.max((effectiveHeight - containerHeight) / 2, 0);
     
-    // Limita le traslazioni
-    posX = clamp(posX, -maxTranslateX, maxTranslateX);
-    posY = clamp(posY, -maxTranslateY, maxTranslateY);
+    // Applica un elastic clamping per rendere il movimento più "naturale"
+    const elasticX = elasticClamp(posX, -maxTranslateX, maxTranslateX);
+    const elasticY = elasticClamp(posY, -maxTranslateY, maxTranslateY);
     
-    // Applica la trasformazione: prima la traduzione, poi lo scaling
-    modalImg.style.transform = `translate(${posX}px, ${posY}px) scale(${scale})`;
+    // Applica la trasformazione: prima la traslazione, poi lo scaling
+    modalImg.style.transform = `translate(${elasticX}px, ${elasticY}px) scale(${scale})`;
   }
   
   /**
@@ -349,12 +353,12 @@
    */
   modalImg.addEventListener('touchstart', function(e) {
     if (e.touches.length === 2) {
-      // Avvio del pinch‑zoom
+      // Inizio del pinch‑zoom
       isPinching = true;
       startDist = getDistance(e.touches[0], e.touches[1]);
       lastScale = scale;
     } else if (e.touches.length === 1 && scale > 1) {
-      // Avvio del panning (trascinamento) se l’immagine è ingrandita
+      // Inizio del panning (trascinamento) se l’immagine è ingrandita
       isDragging = true;
       lastX = e.touches[0].clientX - posX;
       lastY = e.touches[0].clientY - posY;
@@ -364,13 +368,13 @@
   modalImg.addEventListener('touchmove', function(e) {
     if (isPinching && e.touches.length === 2) {
       const currentDist = getDistance(e.touches[0], e.touches[1]);
-      // Calcola la nuova scala in base al rapporto tra la distanza corrente e quella iniziale
+      // Calcola la nuova scala in base al rapporto corrente
       scale = lastScale * (currentDist / startDist);
       if (scale < 1) {
-        scale = 1; // Non permettiamo di ridurre l’immagine oltre la dimensione originale
+        scale = 1; // Non permettiamo una scala inferiore a 1
       }
       updateTransform();
-      e.preventDefault();  // Previene il comportamento nativo di pinch‑zoom del browser
+      e.preventDefault();  // Previene lo zoom nativo del browser
     } else if (isDragging && e.touches.length === 1) {
       // Aggiorna la traslazione in base al movimento del dito
       posX = e.touches[0].clientX - lastX;
@@ -404,7 +408,7 @@
   modalClose.addEventListener('click', function(e) {
     modal.style.display = "none";
     document.body.style.overflow = "";
-    modalImg.classList.remove('zoomed'); // Se usi anche questa classe
+    modalImg.classList.remove('zoomed'); // Se viene utilizzata anche questa classe
     resetModalImage();
     e.preventDefault();
   });
@@ -417,6 +421,7 @@
       resetModalImage();
     }
   });
+
 
 
   </script>
