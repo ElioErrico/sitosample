@@ -222,7 +222,7 @@ body {
 
 /* Pulsante exit: posizionato in alto a destra */
 .modal-close {
-  position: absolute;
+  position: fixed;
   top: 20px;
   right: 20px;
   color: #fff;
@@ -235,7 +235,7 @@ body {
 
 /* Pulsante zoom: posizionato in basso a sinistra */
 .modal-zoom {
-  position: absolute;
+  position: fixed;
   bottom: 20px;
   left: 20px;
   color: #fff;
